@@ -1,40 +1,47 @@
 import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
+// 나머지 합
 public class Main {
-    static boolean[] V;
-    static ArrayList<Integer>[] A;
-    static int virus;
+    static int computer;
+    static boolean[] visited;
+    static int[][] matrix;
+    static int count=0;
     public static void solution() throws Exception {
-        var scanner = new Scanner(System.in);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
 
-        int n = Integer.parseInt(scanner.nextLine());
-        int c = Integer.parseInt(scanner.nextLine());
+        st = new StringTokenizer(br.readLine());
 
-        V = new boolean[n+1];
-        A = new ArrayList[n+1];
+        computer = Integer.parseInt(st.nextToken());
+        matrix = new int[computer][computer];
+        visited = new boolean[computer];
 
-        for(int i = 0; i <= n; i++){
-            A[i] = new ArrayList<>();
+        st = new StringTokenizer(br.readLine());
+
+        int connection = Integer.parseInt(st.nextToken());
+
+        for(int i=0; i<connection; i++){
+            st = new StringTokenizer(br.readLine());
+
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+
+            matrix[a-1][b-1] = matrix[b-1][a-1] = 1;
         }
-
-        for(int i = 0; i < c; i++){
-            String input = scanner.nextLine();
-            String[] tokens = input.split(" ");
-
-            A[Integer.parseInt(tokens[0])].add(Integer.parseInt(tokens[1]));
-            A[Integer.parseInt(tokens[1])].add(Integer.parseInt(tokens[0]));
-        }
-
-        DRF(1);
-        System.out.print(virus);
+        dfs(0);
+        sb.append(count-1);
+        System.out.print(sb);
     }
-    public static void DRF(int start){
-        V[start] = true;
 
-        for(int x : A[start]){
-            if(!V[x]){
-                DRF(x);
-                virus++;
+    public static void dfs(int start){
+        visited[start] = true;
+        count++;
+        for(int i=0; i<computer; i++){
+            if(!visited[i] && matrix[start][i] == 1){
+                dfs(i);
             }
         }
     }

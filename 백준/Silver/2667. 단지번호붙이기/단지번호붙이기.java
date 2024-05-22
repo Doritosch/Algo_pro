@@ -1,63 +1,69 @@
 import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
-// 단지번호붙이기
+
 public class Main {
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
     static boolean[][] visited;
-    static ArrayList<Integer>[] graph;
-    static int[] dx = {0,1,0,-1};
-    static int[] dy = {1,0,-1,0};
-    static int count, n;
-    static ArrayList<Integer> answer;
+    static int[][] matrix;
+    static int area;
+    static int count;
     public static void solution() throws Exception {
-        var scanner = new Scanner(System.in);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
+        List<Integer> answer = new ArrayList<>();
 
-        n = Integer.parseInt(scanner.nextLine());
+        count = 0;
 
-        visited = new boolean[n][n];
-        graph = new ArrayList[n];
-        answer = new ArrayList<>();
-        count = 1;
+        st = new StringTokenizer(br.readLine());
 
-        for(int i = 0; i < n; i++){
-            graph[i] = new ArrayList<>();
-        }
+        int v = Integer.parseInt(st.nextToken());
+        matrix = new int[v+1][v+1];
+        visited = new boolean[v+1][v+1];
 
-        for(int i = 0; i < n; i++){
-            String input = scanner.nextLine();
-            String[] tokens = input.split("");
-            for(String token : tokens){
-                graph[i].add(Integer.parseInt(token));
+        for(int i=0; i<v; i++){
+            String line = br.readLine();
+            for(int j=0; j<v; j++){
+                matrix[i+1][j+1] = Character.getNumericValue(line.charAt(j));
             }
         }
 
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < n; j++){
-                if(!visited[i][j] && graph[i].get(j) == 1){
-                    DFS(i, j);
-                    answer.add(count);
-                    count = 1;
+        for(int i=1; i<v+1; i++){
+            for(int j=1; j<v+1; j++){
+                if(!visited[i][j] && matrix[i][j]==1 ){
+                    count++;
+                    area = 0;
+                    dfs(i,j);
+                    answer.add(area);
                 }
             }
         }
-
-        Collections.sort(answer);
-        System.out.print(answer.size()+"\n");
-        for(int i = 0; i < answer.size(); i++){
-            System.out.print(answer.get(i)+"\n");
+        answer.sort(Comparator.naturalOrder());
+        sb.append(count).append("\n");
+        for(int size : answer){
+            sb.append(size).append("\n");
         }
+        System.out.println(sb);
     }
-    public static void DFS(int x, int y){
+    public static void dfs(int x, int y){
         visited[x][y] = true;
+        area++;
+        for(int i=0; i<4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
 
-        for(int i = 0; i < 4; i++){
-            int nx = dx[i] + x;
-            int ny = dy[i] + y;
-            if(nx >= 0 && ny >= 0 && nx < n && ny < n && graph[nx].get(ny)==1 && !visited[nx][ny]){
-                count++;
-                DFS(nx, ny);
+            if((nx>0 && ny>0) && (nx<matrix.length && ny<matrix[0].length)){
+                if(!visited[nx][ny] && matrix[nx][ny] == 1){
+                    dfs(nx,ny);
+                }
             }
         }
     }
+
+
     public static void main(String args[]) throws Exception {
         solution();
     }

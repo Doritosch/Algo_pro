@@ -12,8 +12,8 @@ class Main
         StringTokenizer st;
 
         st = new StringTokenizer(br.readLine());
-        long n = Integer.parseInt(st.nextToken());
-        long m = Integer.parseInt(st.nextToken());
+        long n = Long.parseLong(st.nextToken());
+        long m = Long.parseLong(st.nextToken());
 
         long a = Math.min(n, m);
         long b = Math.max(n, m);

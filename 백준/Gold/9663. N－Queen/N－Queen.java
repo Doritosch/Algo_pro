@@ -1,42 +1,40 @@
-import java.awt.*;
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-class Main {
-    static int N;
+public class Main {
+
     static int[] board;
-    static int result = 0;
+    static int n;
+    static int count=0;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
-        N = Integer.parseInt(br.readLine());
-        board = new int[N];
+        n = Integer.parseInt(br.readLine());
 
-        solve(0);
+        board = new int[n];
 
-        sb.append(result);
-        System.out.print(sb.toString());
+        backTracking(0);
+
+        System.out.println(count);
     }
-
-    public static void solve(int row) {
-        if(row == N) {
-            result++;
+    public static void backTracking(int depth) {
+        if ( depth == n ) {
+            count++;
             return;
         }
 
-        for(int i=0; i<N; i++) {
-            if(isValid(row, i)) {
-                board[row] = i;
-                solve(row+1);
+        for(int i=0; i<n; i++) {
+            board[depth] = i;
+            if ( isValidSquare(depth) ) {
+                backTracking(depth+1);
             }
         }
     }
-
-    private static boolean isValid(int row, int i) {
-        for(int j=0; j<row; j++) {
-            if(board[j] == i || Math.abs(board[j]-i) == Math.abs(j-row)) {
+    // 열 확인
+    public static boolean isValidSquare(int square) {
+        for(int i=0; i<square; i++) {
+            if ( board[i] == board[square] || square-i == Math.abs(board[square]-board[i])) {
                 return false;
             }
         }

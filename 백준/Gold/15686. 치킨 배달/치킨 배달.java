@@ -56,7 +56,6 @@ class Main
         for(int i=at; i<chicken.size(); i++) {
             ch[depth] = chicken.get(i);
             dfs(i+1, depth+1);
-            dfs(i+1, depth);
         }
     }
     public static int getDistance() {

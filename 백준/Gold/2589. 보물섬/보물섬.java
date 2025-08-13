@@ -1,0 +1,91 @@
+import java.util.*;
+import java.io.*;
+
+/**
+ * 2589 - 보물섬
+ * n(세로), m(가로), (matrix, visited) 초기화
+ *
+ * for(n만큼 반복) {
+ *     for(m만큼 반복) {
+ *         matrix에 육지, 바다 정보 입력
+ *     }
+ * }
+ *
+ * for(n만큼 반복) {
+ *     for(m만큼 반복) {
+ *         if (!visited) bfs로 최대 거리 계산 및 최댓값 갱신
+ *     }
+ * }
+ */
+class Main {
+    static int n, m;
+    static char[][] matrix;
+    static int[][] visited;
+    static int[] dx = {1, 0, -1, 0};
+    static int[] dy = {0, 1, 0, -1};
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        matrix = new char[n][m];
+
+        int answer = 0;
+
+        for(int i=0; i<n; i++) {
+            String line = br.readLine();
+            for(int j=0; j<m; j++) {
+                matrix[i][j] = line.charAt(j);
+            }
+        }
+
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<m; j++) {
+                if (matrix[i][j] == 'L') {
+                    int max = bfs(new Node(i,j));
+                    answer = Math.max(answer, max);
+                }
+            }
+        }
+
+        System.out.println(answer);
+    }
+    public static int bfs(Node node) {
+        visited = new int[n][m];
+        int max = 0;
+        Queue<Node> q = new LinkedList<>();
+
+        q.add(node);
+        visited[node.x][node.y] = 1;
+
+        while(!q.isEmpty()) {
+            Node cur = q.poll();
+
+            for(int i=0; i<4; i++) {
+                int nx = cur.x + dx[i];
+                int ny = cur.y + dy[i];
+
+                if ((nx<0 || ny<0) || (nx>=n || ny>=m)) {
+                    continue;
+                }
+
+                if (visited[nx][ny] == 0 && matrix[nx][ny] == 'L') {
+                    visited[nx][ny] = visited[cur.x][cur.y] + 1;
+                    max = Math.max(max, visited[nx][ny]);
+                    q.add(new Node(nx, ny));
+                }
+            }
+        }
+        return max - 1;
+    }
+    static class Node {
+        int x;
+        int y;
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+}

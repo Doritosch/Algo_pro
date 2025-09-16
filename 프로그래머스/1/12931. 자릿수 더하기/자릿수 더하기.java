@@ -2,13 +2,12 @@ import java.util.*;
 
 public class Solution {
     public int solution(int n) {
-        int answer = 0;
-
+        int sum = 0;
         while(n>0) {
-            answer += n%10;
+            int div = n % 10;
+            sum += div;
             n /= 10;
         }
-
-        return answer;
+        return sum;
     }
 }

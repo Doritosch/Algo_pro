@@ -1,14 +1,12 @@
 class Solution {
     public long solution(long n) {
-        long answer = 0;
-        double value = Math.sqrt(n);
-        answer = (long)value;
+        double sqrtValue = Math.sqrt(n);
+        long longValue = (long)sqrtValue;
         
-        if(answer-value!=0) {
+        if (sqrtValue != longValue) {
             return -1;
         }
         
-        answer = (answer+1)*(answer+1);
-        return answer;
+        return (longValue+1) * (longValue+1);
     }
 }

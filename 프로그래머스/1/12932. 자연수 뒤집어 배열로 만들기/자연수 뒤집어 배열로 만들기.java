@@ -1,11 +1,18 @@
+import java.util.*;
 class Solution {
     public int[] solution(long n) {
-        int len = (int)(Math.log10(n)+1);
-        int[] answer = new int[len];
+        Queue<Long> q = new LinkedList<>();
         
-        for(int i=0; i<len; i++) {
-            answer[i] = (int)(n%10);
-            n/=10;
+        while(n>0) {
+            long v = n % 10;
+            q.add(v);
+            n /= 10;
+        }
+        
+        int[] answer = new int[q.size()];
+        int idx = 0;
+        while(!q.isEmpty()) {
+            answer[idx++] = q.poll().intValue();
         }
         return answer;
     }

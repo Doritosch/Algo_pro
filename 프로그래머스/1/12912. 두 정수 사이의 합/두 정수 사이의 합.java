@@ -1,19 +1,10 @@
 class Solution {
     public long solution(int a, int b) {
-        long answer = 0;
-        
-        if(a>b) {
-            for(int i=0; i<=a-b; i++) {
-                answer += (long)(b+i);
-            }
-        } else if(a==b) {
-            answer = a;
-        } else {
-            for(int i=0; i<=b-a; i++) {
-                answer += (long)(a+i);
-            }
+        long A = (long)a;
+        long B = (long)b;
+        if (a<b) {
+            return (long)((B*(B+1))/2 - ((A-1)*(A))/2);
         }
-        
-        return answer;
+        return (long)((A*(A+1))/2 - ((B-1)*(B))/2);
     }
 }

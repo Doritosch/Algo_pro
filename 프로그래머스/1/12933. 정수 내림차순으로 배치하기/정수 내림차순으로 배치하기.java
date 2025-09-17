@@ -1,18 +1,21 @@
 import java.util.*;
 class Solution {
     public long solution(long n) {
-        String s = "" + n;
+        int[] digits = new int[10];
         long answer = 0;
-        int[] arr = new int[s.length()];
-        
-        for(int i=0; i<s.length(); i++) {
-            arr[i] = s.charAt(i) - '0';
+        while(n>0) {
+            int digit = (int)(n % 10);
+            digits[digit]++;
+            n /= 10;
         }
         
-        Arrays.sort(arr);
-        
-        for(int i=arr.length-1; i>=0; i--) {
-            answer = answer*10 + (int)arr[i];
+        for(int i=0; i<10; i++) {
+            if (digits[9-i] != 0) {
+                for(int j=0; j<digits[9-i]; j++) {
+                    answer *= 10;
+                    answer += 9-i;
+                }
+            }
         }
         return answer;
     }

@@ -1,15 +1,16 @@
 class Solution {
     public boolean solution(int x) {
-        boolean answer = false;
+        int n = x;
         int sum = 0;
-        String s = "" + x;
-        for(int i=0; i<s.length(); i++) {
-            sum += s.charAt(i)-'0';
+        while(n>0) {
+            int div = n%10;
+            sum += div;
+            n /= 10;
         }
         
-        if(x%sum==0) {
-            answer = true;
+        if (x%sum == 0) {
+            return true;
         }
-        return answer;
+        return false;
     }
 }

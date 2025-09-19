@@ -1,70 +1,72 @@
 import java.util.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 
 
 public class Main {
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {1, 0, -1, 0};
+    static int[][] map;
     static boolean[][] visited;
-    static int[][] matrix;
-    static int area;
-    static int count;
-    public static void solution() throws Exception {
+    static int[] dx = {1, 0, -1, 0};
+    static int[] dy = {0, 1, 0, -1};
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
+
+        int n = Integer.parseInt(br.readLine());
+        map = new int[n][n];
+        visited = new boolean[n][n];
+
+        for(int i=0; i<n; i++) {
+            String[] s = br.readLine().split("");
+            for(int j=0; j<n; j++) {
+                map[i][j] = Integer.parseInt(s[j]);
+            }
+        }
+
         List<Integer> answer = new ArrayList<>();
-
-        count = 0;
-
-        st = new StringTokenizer(br.readLine());
-
-        int v = Integer.parseInt(st.nextToken());
-        matrix = new int[v+1][v+1];
-        visited = new boolean[v+1][v+1];
-
-        for(int i=0; i<v; i++){
-            String line = br.readLine();
-            for(int j=0; j<v; j++){
-                matrix[i+1][j+1] = Character.getNumericValue(line.charAt(j));
+        for(int i=0; i<n; i++) {
+            for(int j=0; j<n; j++) {
+                if (!visited[i][j] && map[i][j] == 1) {
+                    answer.add(bfs(new Node(i, j)));
+                }
             }
         }
 
-        for(int i=1; i<v+1; i++){
-            for(int j=1; j<v+1; j++){
-                if(!visited[i][j] && matrix[i][j]==1 ){
+        Collections.sort(answer);
+        System.out.println(answer.size());
+        for(int v : answer) {
+            System.out.println(v);
+        }
+    }
+    public static int bfs(Node n) {
+        Queue<Node> q = new LinkedList<>();
+        q.add(n);
+        visited[n.x][n.y] = true;
+        int count = 1;
+        while(!q.isEmpty()) {
+            Node cur = q.poll();
+
+            for(int i=0; i<4; i++) {
+                int nx = cur.x + dx[i];
+                int ny = cur.y + dy[i];
+
+                if (nx<0 || ny<0 || (nx>=map.length || ny>=map[0].length)) {
+                    continue;
+                }
+
+                if (!visited[nx][ny] && map[nx][ny] == 1) {
                     count++;
-                    area = 0;
-                    dfs(i,j);
-                    answer.add(area);
+                    visited[nx][ny] = true;
+                    q.add(new Node(nx, ny));
                 }
             }
         }
-        answer.sort(Comparator.naturalOrder());
-        sb.append(count).append("\n");
-        for(int size : answer){
-            sb.append(size).append("\n");
-        }
-        System.out.println(sb);
+        return count;
     }
-    public static void dfs(int x, int y){
-        visited[x][y] = true;
-        area++;
-        for(int i=0; i<4; i++){
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-
-            if((nx>0 && ny>0) && (nx<matrix.length && ny<matrix[0].length)){
-                if(!visited[nx][ny] && matrix[nx][ny] == 1){
-                    dfs(nx,ny);
-                }
-            }
+    public static class Node {
+        int x;
+        int y;
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
-    }
-
-
-    public static void main(String args[]) throws Exception {
-        solution();
     }
 }

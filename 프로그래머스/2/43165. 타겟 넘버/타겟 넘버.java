@@ -5,15 +5,14 @@ class Solution {
         dfs(numbers, 0, 0, target);
         return answer;
     }
-    public void dfs(int[] numbers, int idx, int num, int target) {
+    public void dfs(int[] numbers, int idx, int sum, int target) {
         if (idx == numbers.length) {
-            if (num == target) {
-                answer++;
+            if (sum == target) {
+                answer += 1;
             }
             return;
         }
-    
-        dfs(numbers, idx+1, num+numbers[idx], target);
-        dfs(numbers, idx+1, num-numbers[idx], target);
+        dfs(numbers, idx+1, sum+numbers[idx], target);
+        dfs(numbers, idx+1, sum-numbers[idx], target);
     }
 }

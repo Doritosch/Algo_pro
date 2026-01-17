@@ -1,47 +1,57 @@
-import java.awt.*;
-import java.awt.desktop.SystemEventListener;
-import java.io.*;
 import java.util.*;
-import java.util.List;
+import java.io.*;
 
-class Main {
+
+public class Main {
+    private static StringBuffer sb;
+    private static int cursor;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
         StringTokenizer st;
 
-        String s = br.readLine();
-        sb.append(s);
-        int n = Integer.parseInt(br.readLine());
+        sb = new StringBuffer(br.readLine());
+        cursor = sb.length();
 
-        int length = s.length();
-        int cursor = s.length();
-        for (int i=0; i<n; i++) {
+        int count = Integer.parseInt(br.readLine());
+        for(int i=0; i<count; i++) {
             st = new StringTokenizer(br.readLine());
-            String command = st.nextToken();
-
-            if ( command.equals("L") ) {
-                if ( cursor>0 ) {
-                    cursor--;
-                }
-            } else if ( command.equals("D") ) {
-                if ( cursor<length ) {
-                    cursor++;
-                }
-            } else if ( command.equals("B") ) {
-                if ( cursor>0 ) {
-                    sb.delete(cursor-1, cursor);
-                    cursor--;
-                    length--;
-                }
+            String token = st.nextToken();
+            if (token.equals("L")) {
+                pressL();
+            } else if (token.equals("D")) {
+                pressR();
+            } else if (token.equals("B")) {
+                pressB();
             } else {
-                String c = st.nextToken();
-                sb.insert(cursor, c);
-                cursor++;
-                length++;
+                char c = st.nextToken().charAt(0);
+                pressP(c);
             }
         }
 
-        System.out.println(sb.toString());
+        System.out.println(String.valueOf(sb));
+    }
+
+    public static void pressL() {
+        if (cursor <= 0) {
+            return;
+        }
+        cursor -= 1;
+    }
+    public static void pressR() {
+        if (cursor >= sb.length()) {
+            return;
+        }
+        cursor += 1;
+    }
+    public static void pressB() {
+        if (cursor <= 0) {
+            return;
+        }
+        sb.deleteCharAt(cursor-1);
+        cursor--;
+    }
+    public static void pressP(char c) {
+        sb.insert(cursor++, c);
     }
 }

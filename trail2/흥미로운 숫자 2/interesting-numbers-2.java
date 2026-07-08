@@ -26,17 +26,15 @@ public class Main {
             cnt += 1;
         }
 
-        int k = 0;
+        boolean interesting = false;
         for(int i=0; i<10; i++) {
-            if (nums[i] != 0) {
-                k += 1;
+            if (nums[i] == cnt - 1) {
+                interesting = true;
             }
         }
-
-        if (k != 2) return false;
-
-        for(int i=0; i<10; i++) {
-            if (nums[i] == 1) return true;
+        
+        if (interesting) {
+            return true;
         }
         return false;
     }

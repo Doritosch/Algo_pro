@@ -1,34 +1,29 @@
-import java.util.*;
-
+import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        int M = sc.nextInt();
 
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-
-        int[][] arr = new int[m][2];
-        for(int i=0; i<m; i++) {
-            arr[i][0] = sc.nextInt();
-            arr[i][1] = sc.nextInt();
+        int[] a = new int[M];
+        int[] b = new int[M];
+        for (int i = 0; i < M; i++) {
+            a[i] = sc.nextInt();
+            b[i] = sc.nextInt();
         }
         
         int ans = 0;
-        for(int i=0; i<m; i++) {
-            int a = arr[i][0];
-            int b = arr[i][1];
-            
-            int cnt = 1;
-            for(int j=0; j<m; j++) {
-                if (i == j) {
-                    continue;
+        for(int i=1; i<=N; i++) {
+            for(int j=i+1; j<=N; j++) {
+                int cnt = 0;
+                for(int k=0; k<M; k++) {
+                    if ((i == a[k] && j == b[k]) ||
+                    i == b[k] && j == a[k]) {
+                        cnt += 1;
+                    }
                 }
-                if ((a == arr[j][0] && b == arr[j][1]) ||
-                b == arr[j][0] && a == arr[j][1]) {
-                    cnt += 1;
-                }
+                ans = Math.max(ans, cnt);
             }
-            ans = Math.max(ans, cnt);
         }
         System.out.print(ans);
     }

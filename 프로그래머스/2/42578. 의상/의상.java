@@ -8,11 +8,13 @@ class Solution {
             map.put(clothes[i][1], map.getOrDefault(clothes[i][1], 0) + 1);
         }
         
-        int answer = 1;
+        int count = 1;
         for(int v : map.values()) {
-            answer = answer * (v+1);
+            count *= (v + 1);
         }
-        answer--;
+        
+        int answer = count - 1;
+        
         return answer;
     }
 }

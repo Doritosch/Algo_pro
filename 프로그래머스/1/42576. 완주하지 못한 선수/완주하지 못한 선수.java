@@ -1,20 +1,14 @@
 import java.util.*;
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        Map<String, Integer> map = new HashMap<>();
         String answer = "";
+        Map<String, Integer> result = new HashMap<>();
         
-        for(String member : participant) {
-            map.put(member, map.getOrDefault(member, 0)+1);
-        }
-        
-        for(String member : completion) {
-            map.put(member, map.get(member)-1);
-        }
-        
-        for(String member : map.keySet()) {
-            if (map.get(member) != 0) {
-                return member;
+        for(String p : participant) result.put(p, result.getOrDefault(p, 0) + 1);
+        for(String c : completion) result.put(c, result.get(c) - 1);
+        for(String r : result.keySet()) {
+            if (result.get(r) != 0) {
+                answer = r;
             }
         }
         return answer;

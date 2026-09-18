@@ -2,34 +2,31 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] priorities, int location) {
-        Queue<int[]> q = new LinkedList<>();
+        Queue<Integer> q = new LinkedList<>();
         
         for(int i=0; i<priorities.length; i++) {
-            q.add(new int[]{priorities[i], i});
+            q.add(i);
         }
         
-        int count = 1;
+        int count = 0;
         while(!q.isEmpty()) {
-            int[] process = q.poll();
-            
+            int p = q.poll();
             boolean isHigher = false;
             
-            for(int[] priority : q) {
-                if (priority[0] > process[0]) {
+            for(int idx : q) {
+                if (priorities[idx] > priorities[p]) {
                     isHigher = true;
                     break;
-                }
+                } 
             }
             
             if (isHigher) {
-                q.add(process);
+                q.add(p);
             } else {
-                if (process[1] == location) {
-                    return count;
-                }
-                count++;
+                count += 1;
+                if (location == p) return count;
             }
         }
-        return 0;
+        return count;
     }
 }

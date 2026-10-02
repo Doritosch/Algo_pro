@@ -1,72 +1,71 @@
 import java.util.*;
 class Solution {
-    static int[] dx = {1, 0, -1, 0};
-    static int[] dy = {0, 1, 0, -1};
-    static int[][] visited;
-    
+    String[] maps;
+    int[][] distance;
+    boolean[][] visited;
+    int[] dx = {1, 0, -1, 0};
+    int[] dy = {0, 1, 0, -1};
     public int solution(String[] maps) {
+        this.maps = maps;
+        
+        int start = 0, end = 0;
         int answer = 0;
-        visited = new int[maps.length][maps[0].length()];
-        
-        Node start = getStart(maps);
-        
-        Node lever = bfs(start, maps, 'L');
-        if ( lever == null ) {
-            return -1;
-        }
-
-        answer += visited[lever.x][lever.y];
-        visited = new int[maps.length][maps[0].length()];
-        
-        Node exit = bfs(lever, maps, 'E');
-        if ( exit == null ) {
-            return -1;
-        }
-        answer += visited[exit.x][exit.y];
-        
-        return answer;
-    }
-    public Node getStart(String[] maps) {
         for(int i=0; i<maps.length; i++) {
             for(int j=0; j<maps[0].length(); j++) {
-                if ( maps[i].charAt(j) == 'S' ) {
-                    return new Node(i,j);
+                if (maps[i].charAt(j) == 'S') {
+                    start = bfs(i, j, 'L');
+                }
+                if (maps[i].charAt(j) == 'L') {
+                    end = bfs(i, j, 'E');
                 }
             }
         }
-        return null;
-    }
-    public Node bfs(Node start, String[] maps, char target) {
-        Queue<Node> q = new LinkedList<>();
         
-        q.add(start);
+        if (start == -1 || end == -1) {
+            answer = -1;
+        } else {
+            answer = start + end;
+        }
+        
+        return answer;
+    }
+    public int bfs(int x, int y, char target) {
+        this.distance = new int[maps.length][maps[0].length()];
+        this.visited = new boolean[maps.length][maps[0].length()];
+        Queue<Node> q = new LinkedList<>();
+        q.offer(new Node(x, y));
         
         while(!q.isEmpty()) {
-            Node curPos = q.poll();
+            Node cur = q.poll();
             
+            if (maps[cur.x].charAt(cur.y) == target) {
+                return distance[cur.x][cur.y];
+            }
             for(int i=0; i<4; i++) {
-                int nx = curPos.x + dx[i];
-                int ny = curPos.y + dy[i];
+                int nx = cur.x + dx[i];
+                int ny = cur.y + dy[i];
                 
-                if ( (nx>=0 && ny >=0) && (nx<maps.length && ny<maps[0].length()) ){
-                    if ( visited[nx][ny]==0 && maps[nx].charAt(ny) != 'X') {
-                        visited[nx][ny] = visited[curPos.x][curPos.y] + 1;
-                        if ( maps[nx].charAt(ny)==target ) {
-                            return new Node(nx, ny);
-                        }  
-                        q.add(new Node(nx, ny));
+                if (isRange(nx, ny) && !visited[nx][ny]) {
+                    if (maps[nx].charAt(ny) != 'X') {
+                        q.offer(new Node(nx, ny));
+                        visited[nx][ny] = true;
+                        distance[nx][ny] = distance[cur.x][cur.y] + 1;
                     }
                 }
             }
         }
-        return null;
+        return -1;
     }
-    
-    public class Node{
+    public boolean isRange(int x, int y) {
+        if ((x>=0&&y>=0) && (x<maps.length&&y<maps[0].length())) {
+            return true;
+        }
+        return false;
+    }
+    public class Node {
         int x;
         int y;
-        
-        Node(int x, int y) {
+        public Node(int x, int y) {
             this.x = x;
             this.y = y;
         }
